@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Datei Upload</title>
+</head>
+<body>
+
+<h1>HTML Datei hochladen</h1>
+
+<input type="file" id="fileInput">
+<button onclick="uploadFile()">Hochladen</button>
+
+<p id="status"></p>
+
+<script>
+
+const SERVER_URL = "https://DEIN-SERVER.onrender.com";
+
+async function uploadFile() {
+
+    const fileInput = document.getElementById("fileInput");
+
+    if (fileInput.files.length === 0) {
+        alert("Bitte Datei auswählen");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    try {
+
+        const response = await fetch(SERVER_URL + "/upload", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        document.getElementById("status").innerHTML =
+            "Upload erfolgreich:<br>" +
+            SERVER_URL + result.url;
+
+    } catch (err) {
+
+        document.getElementById("status").innerText =
+            "Fehler beim Upload";
+
+    }
+}
+
+</script>
+
+</body>
+</html>
